@@ -9,6 +9,13 @@ Written by: Andrew Greenwell
 Last edited: Jan 4, 2019
 """
 
+"""
+NOTES:
+  + still need to solve generics issue
+  + still need to fill out the README
+  + still need to test on more interfaces
+"""
+
 import syntax
 import sys
 import re
