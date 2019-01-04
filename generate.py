@@ -1,8 +1,9 @@
 """
-This is an automation script for generating type-correct Java classes (implementations) from 
-their corresponding interfaces. By passing a java interface to this generator at the command line,
-a corresponding implementation file will be constructed with all the proper method definitions. Each method
-will return a predefined value in order to make the file compilable, as specified in the returntypes.py module.
+This is a script for generating type-correct Java classes (implementations) from their 
+corresponding interfaces. By passing a java interface to this generator at the command line,
+a corresponding implementation file will be constructed with all the proper method definitions. 
+Each method will return a predefined value in order to make the file compilable, as specified in 
+the returntypes.py module.
 
 Written by: Andrew Greenwell
 Last edited: Jan 3, 2019
