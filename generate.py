@@ -38,7 +38,6 @@ def init_class():
 	_classFile.write(template.format(_className.rstrip('.java'),
 									 _className.rstrip('C.java')))
 
-
 def parse(line):
 	if _interface_re.match(line):
 		init_class()
@@ -55,10 +54,9 @@ def main():
 	# if the user passed in the number of desired indentation spaces, record it for future use
 	# otherwise, default to its global value of 2
 	try:
-		_num_spaces = sys.argv[2]
+		_num_spaces = int(sys.argv[2])
 	except:
 		pass
-
 	try:
 		filename = sys.argv[1]
 		_className = filename.rstrip('.java') + 'C.java'
