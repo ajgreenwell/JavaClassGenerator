@@ -55,7 +55,6 @@ def parse(line):
 		elif match:
 			init_method(match.group(1), match.group(2), match.group(3), match.group(4))
 	
-
 def main():
 	global _className
 	global _num_spaces
