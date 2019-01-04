@@ -6,9 +6,10 @@ Each method will return a predefined value in order to make the file compilable,
 the returntypes.py module.
 
 Written by: Andrew Greenwell
-Last edited: Jan 3, 2019
+Last edited: Jan 4, 2019
 """
 
+import syntax
 import sys
 import re
 import returntypes as rt
@@ -17,18 +18,16 @@ import returntypes as rt
 _className = ""
 _classFile = None
 _comments = '/*\nThis class file has been automatically generated from its corresponding {} interface.\n\nWritten by: Andrew Greenwell\n*/\n\n'
-_interface_re = re.compile('^ *public interface [\S]+.*')
-_method_re = re.compile('^ *public ([\S]+) ([\S]+)\((.*)\);.*')
 _num_spaces = 2
 
 
-def init_method(return_type, name, args):
-	template = ' ' * _num_spaces + 'public ' + '{} {}({}) {{ return {}; }}\n'
+def init_method(scope, return_type, name, args):
+	template = ' ' * _num_spaces + '{} ' + '{} {}({}) {{ return {}; }}\n'
 	try:
 		return_value = rt.values[return_type.lower()]
 	except:
 		return_value = 'null'
-	_classFile.write(template.format(return_type, name, args, return_value))
+	_classFile.write(template.format(scope, return_type, name, args, return_value))
 
 
 def init_class():
@@ -39,12 +38,15 @@ def init_class():
 									 _className.rstrip('C.java')))
 
 def parse(line):
-	if _interface_re.match(line):
-		init_class()
-		return True
-	match = _method_re.match(line)
-	if match:
-		init_method(match.group(1), match.group(2), match.group(3))
+	for category, exp in syntax.valid.items():
+		match = re.compile(exp).match(line)
+		if match and category == 'interface':
+			init_class()
+			return True
+		elif match and category == 'method':
+			init_method('public', match.group(1), match.group(2), match.group(3))
+		elif match:
+			init_method(match.group(1), match.group(2), match.group(3), match.group(4))
 	
 
 def main():

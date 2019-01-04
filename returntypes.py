@@ -4,7 +4,7 @@ These default return values are then used in generate.py according to the return
 method in the corresponding interface.
 
 Written by: Andrew Greenwell
-Last edited: Jan 3, 2019
+Last edited: Jan 4, 2019
 """
 
 values = {
@@ -18,4 +18,5 @@ values = {
 	'integer': '0',
 	'long': '0L',
 	'short': '0',
+	'void': ''
 }
