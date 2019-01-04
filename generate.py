@@ -1,7 +1,7 @@
 """
 This is a script for generating type-correct Java classes (implementations) from their 
 corresponding interfaces. By passing a java interface to this generator at the command line,
-a corresponding implementation file will be constructed with all the proper method definitions. 
+an implementation file will be automatically constructed with all the proper method definitions. 
 Each method will return a predefined value in order to make the file compilable, as specified in 
 the returntypes.py module.
 
@@ -20,11 +20,12 @@ import syntax
 import sys
 import re
 import returntypes as rt
+import os
 
 
 _className = ""
 _classFile = None
-_comments = '/*\nThis class file has been automatically generated from its corresponding {} interface.\n\nWritten by: Andrew Greenwell\n*/\n\n'
+_comments = '/*\nThis class file has been automatically generated from its corresponding {} interface.\n\nWritten by: {}\n*/\n\n'
 _num_spaces = 2
 
 
@@ -70,7 +71,7 @@ def main():
 		_className = filename.rstrip('.java') + 'C.java'
 		# init new class file with boilerplate comments, so it can be appended to later
 		with open(_className, 'w') as f:
-			f.write(_comments.format(filename))
+			f.write(_comments.format(filename, 'Andrew Greenwell')) # os.getenv('USER', 'Your Name')
 		interface = open(filename, 'r')
 	except:
 		print('***InvalidFilenameError*** : File Does Not Exist')
@@ -80,10 +81,7 @@ def main():
 	line_num = 1
 	for line in interface:
 		line = line.rstrip('\n')
-		if parse(line) == False:
-			print('***ParsingError*** : {} on Line {}'.format(filename, line_num))
-			interface.close()
-			return
+		parse(line)
 		line_num += 1
 
 	_classFile.write(' ' * _num_spaces + 'public static void main(String[] args) {}\n\n')
