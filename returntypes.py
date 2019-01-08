@@ -4,7 +4,6 @@ These default return values are then used in generate.py according to the return
 method in the corresponding interface.
 
 Written by: Andrew Greenwell
-Last edited: Jan 4, 2019
 """
 
 values = {
