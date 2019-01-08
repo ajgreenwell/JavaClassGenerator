@@ -13,7 +13,5 @@ valid = {
 	'interface_generic_extends': '^ *public interface ([^ <>]+)(<(.+) extends .+>) {.*',
 	'import': '^ *(import .+;).*',
 	'method': '^ *([\S]+) ([\S]+)\((.*)\);.*',
-	'public_method': '^ *(public) ([\S]+) ([\S]+)\((.*)\);.*',
-	'public_static_method': '^ *(public static) ([\S]+) ([\S]+)\((.*)\);.*',
-	'static_method': '^ *(static) ([\S]+) ([\S]+)\((.*)\);.*'
+	'public_method': '^ *(public) ([\S]+) ([\S]+)\((.*)\);.*'
 }

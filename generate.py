@@ -9,7 +9,6 @@ Written by: Andrew Greenwell
 
 TO DO:
   + fill out the README
-  + test on more interfaces
   + add more comments
   + delete print statements
   + fix 'interface_generic' regex and
@@ -55,33 +54,26 @@ def init_class(generic=None, generic_extends=None):
 
 def parse(line):
 	for category, exp in syntax.valid.items():
-		match = re.compile(exp).match(line)
+		match = re.compile(exp).fullmatch(line)
 		if match and category == 'import':
 			_classFile.write(match.group(1) + '\n')
-			print('---- matched: {}'.format(category))
 		elif match and category == 'interface':
 			init_class()
-			print('---- matched: {}'.format(category))
 		elif match and category == 'interface_generic':
-			match2 = re.compile(syntax.valid['interface_generic_extends']).match(line)
+			match2 = re.compile(syntax.valid['interface_generic_extends']).fullmatch(line)
+			# if line matches interface_generic regex, first check if it matches interface_generic_extends,
+			# since the latter regex string is a more specific version of the former
 			if match2:
 				init_class(generic=match2.group(2), generic_extends='<' + match2.group(3) + '>')
-				print('---- matched: interface_generic_extends')
 			else:
 				init_class(generic=match.group(1))
-				print('---- matched: {}'.format(category))
 			break
 		elif match and category == 'interface_generic_extends':
 			init_class(generic=match.group(2), generic_extends='<' + match.group(3) + '>')
-			print('---- matched: {}'.format(category))
 		elif match and category == 'method':
 			init_method('public', match.group(1), match.group(2), match.group(3))
-			print('---- matched: {}'.format(category))
-		elif match and (category == 'public_method' or \
-					    category == 'public_static_method' or \
-					    category == 'static_method'):
+		elif match and category == 'public_method':
 			init_method(match.group(1), match.group(2), match.group(3), match.group(4))
-			print('---- matched: {}'.format(category))
 
 
 def set_globals():
