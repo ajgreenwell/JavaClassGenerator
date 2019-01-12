@@ -8,7 +8,6 @@ Written by: Andrew Greenwell
 
 valid = {
 	'interface': '^ *public interface ([^ <>]+) {.*|^ *public interface ([^ <>]+) extends .*{.*',
-	# Need to group the word "extends" together 
 	'interface_generic': '^ *public interface [^ <>]+(<.+>) {.*',
 	'interface_generic_extends': '^ *public interface ([^ <>]+)(<(.+) extends .+>) {.*',
 	'import': '^ *(import .+;).*',

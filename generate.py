@@ -15,25 +15,25 @@ TO DO:
 import syntax
 import sys
 import re
-import returntypes as rt
+import returntypes
 
 _interface = ""
 _className = ""
 _classFile = None
-
-# customizable settings
-_name = 'Andrew Greenwell'
-_num_spaces = 0
 _comments = '/*\nThis class file has been automatically generated from ' + \
 		    'its corresponding {} interface.\nIf that interface extends any ' + \
 		    'others, you may need to define additional methods within this class.\n\nWritten by: {}\n*/\n\n'
+
+# customizable settings
+_name = 'Andrew Greenwell'
+_num_spaces = 2
 
 
 # writes out the proper method definition
 def init_method(scope, return_type, name, args):
 	template = ' ' * _num_spaces + '{} ' + '{} {}({}) {{ return {}; }}\n'
 	try:
-		return_value = rt.values[return_type.lower()]
+		return_value = returntypes.values[return_type.lower()]
 	except:
 		return_value = 'null'
 	_classFile.write(template.format(scope, return_type, name, args, return_value))
@@ -53,7 +53,7 @@ def init_class(generic=None, generic_extends=None):
 
 
 # checks each regex string in syntax.py to look for matches on the provided line
-# depending on which regex gets matched, it calls the appropriate method to perform the write
+# depending on which regex gets matched, calls appropriate function to write out Java code
 def parse(line):
 	for category, exp in syntax.valid.items():
 		match = re.compile(exp).fullmatch(line)
@@ -94,7 +94,7 @@ def main():
 	try:
 		_num_spaces = int(sys.argv[2])
 	except:
-		_num_spaces = 2
+		pass
 
 	# open interface and class files for reading and writing
 	try:
@@ -109,12 +109,12 @@ def main():
 	_classFile.write(_comments.format(_interface, _name))
 
 
-	# main logic
+	# main loop that parses each line of the interface
 	for line in file:
 		line = line.rstrip('\n')
 		parse(line)
 	
-	# write boilerplate closing lines and free up resources
+	# write out boilerplate closing lines and free up resources
 	_classFile.write(' ' * _num_spaces + 'public static void main(String[] args) {}\n\n')
 	_classFile.write('}\n')
 
