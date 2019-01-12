@@ -118,8 +118,8 @@ def main():
 	_classFile.write(' ' * _num_spaces + 'public static void main(String[] args) {}\n\n')
 	_classFile.write('}\n')
 
-	file.close()
 	_classFile.close()
+	file.close()
 
 
 if __name__ == '__main__':
