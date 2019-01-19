@@ -23,14 +23,13 @@ import returntypes
 _interface = ""
 _className = ""
 _classFile = None
+
+# customizable settings
+_num_spaces = 2
 _comments = '/*\nThis class file has been automatically generated from ' + \
 		    'its corresponding {} interface.\nIf that interface extends any ' + \
 		    'others, you may need to define additional methods within this ' + \
-		    'class.\n\nWritten by: {}\n*/\n\n'
-
-# customizable settings
-_name = 'Andrew Greenwell'
-_num_spaces = 2
+		    'class.\n\nWritten by: Andrew Greenwell\n*/\n\n'.format(_interface)
 
 
 # writes out the proper method definition
@@ -110,7 +109,7 @@ def main():
 
 	_className = input('Please enter the name of your class file: ')
 	_classFile = open(_className, 'a')
-	_classFile.write(_comments.format(_interface, _name))
+	_classFile.write(_comments)
 
 
 	# main loop that parses each line of the interface
