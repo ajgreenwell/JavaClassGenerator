@@ -10,6 +10,9 @@ Written by: Andrew Greenwell
 TO DO:
   + fix 'interface_generic' regex and
   	get rid of the patch up in parse()
+  + improve extensiblity and reduce module coupling
+  	by storing init_ methods in syntax.py along with
+  	the appropriate method call for each regex string
 """
 
 import syntax
