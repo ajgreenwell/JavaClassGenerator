@@ -25,7 +25,8 @@ _className = ""
 _classFile = None
 _comments = '/*\nThis class file has been automatically generated from ' + \
 		    'its corresponding {} interface.\nIf that interface extends any ' + \
-		    'others, you may need to define additional methods within this class.\n\nWritten by: {}\n*/\n\n'
+		    'others, you may need to define additional methods within this ' + \
+		    'class.\n\nWritten by: {}\n*/\n\n'
 
 # customizable settings
 _name = 'Andrew Greenwell'
@@ -34,11 +35,11 @@ _num_spaces = 2
 
 # writes out the proper method definition
 def init_method(scope, return_type, name, args):
-	template = ' ' * _num_spaces + '{} ' + '{} {}({}) {{ return {}; }}\n'
+	template = ' ' * _num_spaces + '{} ' + '{} {}({}) {{ return{}; }}\n'
 	try:
 		return_value = returntypes.values[return_type.lower()]
 	except:
-		return_value = 'null'
+		return_value = ' null'
 	_classFile.write(template.format(scope, return_type, name, args, return_value))
 
 
