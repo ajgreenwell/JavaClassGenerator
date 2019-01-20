@@ -1,6 +1,6 @@
 /*
 This class file has been automatically generated from its corresponding SymbolTable.java interface.
-If that interface extends any others, you may need to define additional methods within thisclass.
+If that interface extends any others, you may need to define additional methods within this class.
 
 Written by: Andrew Greenwell
 */
