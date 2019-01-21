@@ -32,29 +32,6 @@ _comments = '/*\nThis class file has been automatically generated from ' + \
 		    'class.\n\nWritten by: Andrew Greenwell\n*/\n\n'.format(_interface)
 
 
-# writes out the proper method definition
-def init_method(scope, return_type, name, args):
-	template = ' ' * _num_spaces + '{} ' + '{} {}({}) {{ return{}; }}\n'
-	try:
-		return_value = returntypes.values[return_type.lower()]
-	except:
-		return_value = ' null'
-	_classFile.write(template.format(scope, return_type, name, args, return_value))
-
-
-# writes out the proper class definition
-def init_class(generic=None, generic_extends=None):
-	template = '\npublic class {}{} implements {}{} {{\n\n'
-	className = _className.rstrip('.java')
-	interface = _interface.rstrip('.java')
-	if generic and not generic_extends:
-		_classFile.write(template.format(className, generic, interface, generic))
-	elif generic and generic_extends:
-		_classFile.write(template.format(className, generic, interface, generic_extends))
-	else:
-		_classFile.write(template.format(className, '', interface, ''))
-
-
 # checks each regex string in syntax.py to look for matches on the provided line
 # depending on which regex gets matched, calls appropriate function to write out Java code
 def parse(line):
