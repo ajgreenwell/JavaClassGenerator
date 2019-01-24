@@ -7,7 +7,7 @@ Written by: Andrew Greenwell
 
 import java.util.*;
 
-public class SymbolTableClass<K, V> implements SymbolTable<K, V> {
+public class ST<K, V> implements SymbolTable<K, V> {
 
   public int getSize() { return 0; }
   public void setSize(int N) { return; }

@@ -29,7 +29,30 @@ _num_spaces = 2
 _comments = '/*\nThis class file has been automatically generated from ' + \
 		    'its corresponding {} interface.\nIf that interface extends any ' + \
 		    'others, you may need to define additional methods within this ' + \
-		    'class.\n\nWritten by: Andrew Greenwell\n*/\n\n'.format(_interface)
+		    'class.\n\nWritten by: Andrew Greenwell\n*/\n\n'
+
+
+# writes out the proper method definition
+def init_method(scope, return_type, name, args):
+	template = ' ' * _num_spaces + '{} ' + '{} {}({}) {{ return{}; }}\n'
+	try:
+		return_value = returntypes.values[return_type.lower()]
+	except:
+		return_value = ' null'
+	_classFile.write(template.format(scope, return_type, name, args, return_value))
+
+
+# writes out the proper class definition
+def init_class(generic=None, generic_extends=None):
+	template = '\npublic class {}{} implements {}{} {{\n\n'
+	className = _className.rstrip('.java')
+	interface = _interface.rstrip('.java')
+	if generic and not generic_extends:
+		_classFile.write(template.format(className, generic, interface, generic))
+	elif generic and generic_extends:
+		_classFile.write(template.format(className, generic, interface, generic_extends))
+	else:
+		_classFile.write(template.format(className, '', interface, ''))
 
 
 # checks each regex string in syntax.py to look for matches on the provided line
@@ -86,7 +109,7 @@ def main():
 
 	_className = input('Please enter the name of your class file: ')
 	_classFile = open(_className, 'a')
-	_classFile.write(_comments)
+	_classFile.write(_comments.format(_interface))
 
 
 	# main loop that parses each line of the interface
