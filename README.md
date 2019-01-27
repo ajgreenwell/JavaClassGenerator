@@ -19,7 +19,7 @@ classfile.java
 
 Afterwards, your new class file will be generated and stored in the current directory.
 
-### Optional Argument -- Indentation Level
+### Optional Argument –– Indentation Level
 
 The `generate.py` module accepts up to 2 arguments via the command line. The first argument is mandatory, and should be a relative path to the desired interface, as shown above. The second is optional, and allows the user to specify a desired indentation level for the class file by passing an integer that represents the number of spaces for each indent, like so:
 
