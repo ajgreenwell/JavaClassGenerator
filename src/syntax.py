@@ -8,11 +8,14 @@ all without having to modify the parser in the generate.py module.
 
 Written by: Andrew Greenwell
 """
+
 import settings
 import returntypes
 
 _class_name = ""
 
+
+#writes out the proper import statement
 def write_import(class_file, module):
 	class_file.write('import ' + module + '\n')
 
@@ -37,6 +40,8 @@ def write_class(class_file, interface, generic, generic_extends):
 		class_file.write(template.format(class_name, generic, interface, generic))
 
 
+# contains relevant metadata about each regex string and its corresponding function 
+# that are used in generate.parse() to provide a more orthogonal and extensible design
 expressions = {
 
 	'interface': {

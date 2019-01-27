@@ -19,8 +19,9 @@ def parse(class_file, line):
 	for category, expr_data in syntax.expressions.items():
 		match = re.compile(expr_data["regex"]).fullmatch(line)
 		if match:
-			args = [class_file]
-			args.extend([match.group(x) for x in range(1, expr_data["num_groups"] + 1)])
+			args = [class_file] # every function in syntax.py requires the class_file as 1st arg
+			regex_specific_args = [match.group(x) for x in range(1, expr_data["num_groups"] + 1)]
+			args.extend(regex_specific_args)
 			if len(args) != expr_data["num_args"]:
 				args.extend(['' for y in range(0, expr_data["num_args"] - len(args))])
 			expr_data["function"](*args)
