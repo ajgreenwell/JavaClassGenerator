@@ -14,7 +14,7 @@ import returntypes
 
 _class_name = ""
 
-#writes out the proper import statement
+# writes out the proper import statement
 def write_import(class_file, module):
 	class_file.write('import ' + module + '\n')
 
@@ -51,6 +51,7 @@ expressions = {
 				"num_args": 4
 
 				},
+
 	'interface_generic': {
 
 				"regex": '^ *public interface ([^ <>]+)(<(?!.*extends).+>) {.*',
@@ -59,6 +60,7 @@ expressions = {
 				"num_args": 4
 
 				},
+
 	'interface_generic_extends': {
 
 				"regex": '^ *public interface ([^ <>]+)(<(.+) extends .+>) {.*',
@@ -67,6 +69,7 @@ expressions = {
 				"num_args": 4
 
 				},
+
 	'import': {
 
 				"regex": '^ *import (.+;).*',
@@ -75,6 +78,7 @@ expressions = {
 				"num_args": 2
 
 				},
+
 	'method': {
 
 				"regex": '^ *([\S]+) ([\S]+)\((.*)\);.*|^ *public ([\S]+) ([\S]+)\((.*)\);.*',

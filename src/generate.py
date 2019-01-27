@@ -24,7 +24,7 @@ def parse(class_file, line):
 			args.extend(regex_specific_args)
 			if len(args) != expr_data["num_args"]:
 				args.extend(['' for y in range(0, expr_data["num_args"] - len(args))])
-			expr_data["function"](*args)
+			expr_data["function"](*args) # unpack args list and pass to appropriate handler function
 
 
 def main():
