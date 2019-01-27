@@ -1,7 +1,7 @@
 """
-This module contains a dictionary that maps return types to type-correct default return values.
-These default return values are then used in generate.py according to the return type of each 
-method in the corresponding interface.
+This module contains a dictionary that maps lowercased return types to their type-correct, 
+default return values. These default return values are then used in generate.py according 
+to the return type of each method in the corresponding interface.
 
 Written by: Andrew Greenwell
 """
