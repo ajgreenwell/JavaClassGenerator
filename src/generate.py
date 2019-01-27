@@ -65,14 +65,7 @@ def parse(line):
 		elif match and category == 'interface':
 			init_class()
 		elif match and category == 'interface_generic':
-			match2 = re.compile(syntax.valid['interface_generic_extends']).fullmatch(line)
-			# if line matches interface_generic regex, first check if it matches interface_generic_extends,
-			# since the latter regex string is a more specific version of the former
-			if match2:
-				init_class(generic=match2.group(2), generic_extends='<' + match2.group(3) + '>')
-			else:
-				init_class(generic=match.group(1))
-			break  # prevents double matching with interface_generic_extends
+			init_class(generic=match.group(1))
 		elif match and category == 'interface_generic_extends':
 			init_class(generic=match.group(2), generic_extends='<' + match.group(3) + '>')
 		elif match and category == 'method':
