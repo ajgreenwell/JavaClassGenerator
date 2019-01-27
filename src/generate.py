@@ -28,7 +28,7 @@ def parse(class_file, line):
 
 def main():
 
-	# get command line args and set global variables accordingly
+	# get command line args and set variables accordingly
 	try:
 		interface_name = sys.argv[1]
 	except:
