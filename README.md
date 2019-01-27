@@ -1,6 +1,6 @@
 # JavaClassGenerator
 
-This is a code generator inteded to accept Java interfaces as input and produce compilable, type-correct skeletons of their implementing classes. All relevant code is contained within the `/src` directory, while the `/examples` directory contains some sample Java interfaces and their auto-generated class files. The main logic of this generator is contained within the `generate.py` module, while `syntax.py` contains all the necessary details regarding regex matching and class file generation. Lastly, `returntypes.py` contains a dictionary that maps Java data types to their corresponding, default return values. 
+This is a code generator intended to accept Java interfaces as input and produce compilable, type-correct skeletons of their implementing classes. All relevant code is contained within the `/src` directory, while the `/examples` directory contains some sample Java interfaces and their auto-generated class files. The main logic of this generator is contained within the `generate.py` module, while `syntax.py` contains all the necessary details regarding regex matching and class file generation. Lastly, `returntypes.py` contains a dictionary that maps Java data types to their corresponding, default return values. 
 
 ## How To
 
