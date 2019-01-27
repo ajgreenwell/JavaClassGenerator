@@ -27,7 +27,6 @@ def parse(class_file, line):
 
 
 def main():
-	global _class_name
 
 	# get command line args and set global variables accordingly
 	try:
