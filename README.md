@@ -1,6 +1,6 @@
 # JavaClassGenerator
 
-This is a code generator inteded to accept java interfaces as input and produce compilable, type-correct skeletons of their implementing classes. The main logic of this generator is contained within the generate.py module, while syntax.py contains all the necessary details regarding the regex matching and class file generation. Lastly, returntypes.py simply contains a dictionary that maps Java data types to their corresponding, default return values. 
+This is a code generator inteded to accept Java interfaces as input and produce compilable, type-correct skeletons of their implementing classes. The main logic of this generator is contained within the generate.py module, while syntax.py contains all the necessary details regarding regex matching and class file generation. Lastly, returntypes.py contains a dictionary that maps Java data types to their corresponding, default return values. 
 
 ## How To
 
