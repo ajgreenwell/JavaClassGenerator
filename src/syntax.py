@@ -14,7 +14,6 @@ import returntypes
 
 _class_name = ""
 
-
 #writes out the proper import statement
 def write_import(class_file, module):
 	class_file.write('import ' + module + '\n')
