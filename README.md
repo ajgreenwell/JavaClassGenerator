@@ -17,7 +17,13 @@ Please enter the name of your class file:
 classfile.java
 ```
 
-Afterwards, your new class file will be generated and stored in the current directory. Note that if you provide a relative path to the interface file, your class file will be stored in that directory instead.
+Afterwards, your new class file will be generated and stored in the current directory. Note that if you provide a relative path to the interface file, your class file will be stored in that directory instead. For example, if you ran the following command...
+
+```
+python3 generate.py relative/path/to/interface.java
+```
+
+Your new class file could be found at `relative/path/to/classfile.java`.
 
 ### Optional Argument –– Indentation Level
 
