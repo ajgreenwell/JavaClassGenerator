@@ -20,10 +20,11 @@ def parse(class_file, line):
 		match = re.compile(expr_data["regex"]).fullmatch(line)
 		if match:
 			args = [class_file] # every function in syntax.py requires the class_file as 1st arg
-			regex_specific_args = [match.group(x) for x in range(1, expr_data["num_groups"] + 1)]
+			regex_specific_args = [match.group(group_num) for group_num \
+								   in range(1, expr_data["num_groups"] + 1)]
 			args.extend(regex_specific_args)
 			if len(args) != expr_data["num_args"]:
-				args.extend(['' for y in range(0, expr_data["num_args"] - len(args))])
+				args.extend(['' for arg in range(0, expr_data["num_args"] - len(args))])
 			expr_data["function"](*args) # unpack args list and pass to appropriate handler function
 
 
@@ -55,7 +56,8 @@ def main():
 		parse(class_file, line.rstrip('\n'))
 	
 	# write out boilerplate closing lines and free up resources
-	class_file.write(' ' * settings._num_spaces + 'public static void main(String[] args) {}\n\n}\n')
+	class_file.write(' ' * settings._num_spaces + \
+					 'public static void main(String[] args) {}\n\n}\n')
 	class_file.close()
 	interface_file.close()
 
