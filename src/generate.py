@@ -29,7 +29,6 @@ def parse(class_file, line):
 
 
 def main():
-
 	# get command line args and set variables accordingly
 	try:
 		interface_name = sys.argv[1]
@@ -41,17 +40,24 @@ def main():
 	except:
 		pass
 
+	# if the user provided a relative path to the interface, save it
+	# to store the new class file in that same directory
+	path = ''
+	if '/' in interface_name:
+		relative_path_list = interface_name.split('/')
+		path = '/'.join(relative_path_list[:-1]) + '/'
+
 	# open interface and class files for reading and writing
 	try:
 		interface_file = open(interface_name, 'r')
 	except:
-		print('***InvalidFilenameError*** : File Does Not Exist')
+		print('***InvalidFilenameError*** : File or Relative Path Does Not Exist')
 		exit(1)
 	syntax._class_name = input('Please enter the name of your class file: ')
-	class_file = open(syntax._class_name, 'a')
+	class_file = open(path + syntax._class_name, 'a')
 	class_file.write(settings._comments.format(interface_name))
 
-	# main loop that parses each line of the interface and generates the corresponding class file
+	# main loop that parses each line of the interface and generates corresponding class file
 	for line in interface_file:
 		parse(class_file, line.rstrip('\n'))
 	
