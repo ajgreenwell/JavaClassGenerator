@@ -1,5 +1,5 @@
 /*
-An interface for Max Priority Queues
+An interface for Max Priority Queues.
 
 Written by: Andrew Greenwell
 */
