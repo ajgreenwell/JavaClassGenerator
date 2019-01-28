@@ -23,7 +23,7 @@ Afterwards, your new class file will be generated and stored in the current dire
 python3 generate.py relative/path/to/interface.java
 ```
 
-Your new class file could be found at `relative/path/to/classfile.java`.
+Your new class file could be found at: `relative/path/to/classfile.java`
 
 ### Optional Argument –– Indentation Level
 
