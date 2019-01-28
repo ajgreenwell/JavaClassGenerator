@@ -22,6 +22,7 @@ def write_import(class_file, module):
 # writes out the proper method definition
 def write_method(class_file, return_type, name, args):
 	template = ' ' * settings._num_spaces + 'public ' + '{} {}({}) {{ return{}; }}\n'
+	# if the return type is not built-in, default to a return value of 'null'
 	try:
 		return_value = returntypes.values[return_type.lower()]
 	except:
@@ -45,7 +46,16 @@ expressions = {
 
 	'interface': {
 
-				"regex": '^ *public interface ([^ <>]+) {.*|^ *public interface ([^ <>]+) extends .*{.*',
+				"regex": '^ *public interface ([^ <>]+) {.*',
+				"num_groups": 1,
+				"function": write_class,
+				"num_args": 4
+
+				},
+
+	'interface_extends': {
+
+				"regex": '^ *public interface ([^ <>]+) extends .*{.*',
 				"num_groups": 1,
 				"function": write_class,
 				"num_args": 4
@@ -81,7 +91,16 @@ expressions = {
 
 	'method': {
 
-				"regex": '^ *([\S]+) ([\S]+)\((.*)\);.*|^ *public ([\S]+) ([\S]+)\((.*)\);.*',
+				"regex": '^ *([\S]+) ([\S]+)\((.*)\);.*',
+				"num_groups": 3,
+				"function": write_method,
+				"num_args": 4
+
+				},
+
+	'public_method': {
+
+				"regex": '^ *public ([\S]+) ([\S]+)\((.*)\);.*',
 				"num_groups": 3,
 				"function": write_method,
 				"num_args": 4
