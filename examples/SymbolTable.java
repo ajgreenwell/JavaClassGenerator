@@ -1,7 +1,7 @@
 /*
-This is a generic interface for symbol tables. Implemented by SymbolTableC.java
+A generic interface for symbol tables.
 
-Written by: Megan Lesha, Andrew Greenwell
+Written by: Andrew Greenwell
 */
 
 import java.util.*;
