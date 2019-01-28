@@ -5,7 +5,6 @@ Thus, If you wanted the JavaClassGenerator to successfully parse and match more 
 you could define the proper write_ methods and add the relevant metadata to the 'expressions' dictionary, 
 all without having to modify the parser in the generate.py module.
 
-
 Written by: Andrew Greenwell
 """
 
