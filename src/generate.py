@@ -13,19 +13,28 @@ import syntax
 import sys
 import re
 
-# checks each regex string in syntax.py to look for matches on the provided line
-# depending on which regex gets matched, calls appropriate function to write out Java code
-def parse(class_file, line):
+# Checks each regex string in syntax.py to look for matches on provided line.
+# Returns a tuple containing the match object and the relevant expression data
+# from syntax.py if a match is found. Else returns a tuple containing False.
+def parse(line):
 	for category, expr_data in syntax.expressions.items():
 		match = re.compile(expr_data["regex"]).fullmatch(line)
 		if match:
-			args = [class_file] # every function in syntax.py requires the class_file as 1st arg
-			regex_specific_args = [match.group(group_num) for group_num \
-								   in range(1, expr_data["num_groups"] + 1)]
-			args.extend(regex_specific_args)
-			if len(args) != expr_data["num_args"]:
-				args.extend(['' for arg in range(0, expr_data["num_args"] - len(args))])
-			expr_data["function"](*args) # unpack args list and pass to appropriate handler function
+			return (match, expr_data)
+	return (False, False)
+
+
+# Generates list of args to pass handler function based off regex metadata (see syntax.py).
+# Then calls the appropriate handler function to write out the proper Java code
+def write_to_class_file(class_file, match, expr_data):
+	args = [class_file] # every function in syntax.py requires the class_file as 1st arg
+	regex_specific_args = [match.group(group_num) for group_num \
+						   in range(1, expr_data["num_groups"] + 1)]
+	args.extend(regex_specific_args)
+	if len(args) != expr_data["num_args"]:
+		args.extend(['' for arg in range(0, expr_data["num_args"] - len(args))])
+	# unpack args list and pass to appropriate handler function
+	expr_data["function"](*args)
 
 
 def main():
@@ -57,9 +66,11 @@ def main():
 	class_file = open(path + syntax._class_name, 'a')
 	class_file.write(settings._comments.format(interface_name))
 
-	# main loop that parses each line of the interface and generates corresponding class file
+	# main loop that parses each line of the interface and writes out corresponding Java code
 	for line in interface_file:
-		parse(class_file, line.rstrip('\n'))
+		match, expr_data = parse(line.rstrip('\n'))
+		if match:
+			write_to_class_file(class_file, match, expr_data)
 	
 	# write out boilerplate closing lines and free up resources
 	class_file.write(' ' * settings._num_spaces + \
