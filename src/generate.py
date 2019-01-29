@@ -37,6 +37,16 @@ def write_to_class_file(class_file, match, expr_data):
 	expr_data["function"](*args)
 
 
+# If the user provided a relative path to the interface,
+# return it. Else, return the null string.
+def getPath(interface_name):
+	path = ''
+	if '/' in interface_name:
+		relative_path_list = interface_name.split('/')
+		path = '/'.join(relative_path_list[:-1]) + '/'
+	return path
+
+
 def main():
 	# get command line args and set variables accordingly
 	try:
@@ -49,12 +59,7 @@ def main():
 	except:
 		pass
 
-	# if the user provided a relative path to the interface, save it
-	# to store the new class file in that same directory
-	path = ''
-	if '/' in interface_name:
-		relative_path_list = interface_name.split('/')
-		path = '/'.join(relative_path_list[:-1]) + '/'
+	path_to_interface = getPath(interface_name)
 
 	# open interface and class files for reading and writing
 	try:
@@ -63,7 +68,7 @@ def main():
 		print('***InvalidFilenameError*** : File or Relative Path Does Not Exist')
 		exit(1)
 	syntax._class_name = input('Please enter the name of your class file: ')
-	class_file = open(path + syntax._class_name, 'a')
+	class_file = open(path_to_interface + syntax._class_name, 'a')
 	class_file.write(settings._comments.format(interface_name))
 
 	# main loop that parses each line of the interface and writes out corresponding Java code
