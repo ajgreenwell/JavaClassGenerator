@@ -8,10 +8,6 @@ all without having to modify the parser in the generate.py module.
 Written by: Andrew Greenwell
 """
 
-import settings
-import returntypes
-
-_class_name = ""
 
 # writes out the proper import statement
 def write_import(class_file, module):
@@ -20,7 +16,7 @@ def write_import(class_file, module):
 
 # writes out the proper method definition
 def write_method(class_file, return_type, name, args):
-	template = ' ' * settings._num_spaces + 'public ' + '{} {}({}) {{ return{}; }}\n'
+	template = ' ' * settings.__num_spaces + 'public ' + '{} {}({}) {{ return{}; }}\n'
 	# if the return type is not built-in, default to a return value of 'null'
 	try:
 		return_value = returntypes.values[return_type.lower()]
@@ -32,7 +28,7 @@ def write_method(class_file, return_type, name, args):
 # writes out the proper class definition
 def write_class(class_file, interface, generic, generic_extends):
 	template = '\npublic class {}{} implements {}{} {{\n\n'
-	class_name = _class_name.rstrip('.java')
+	class_name = __class_name.rstrip('.java')
 	if generic_extends:
 		class_file.write(template.format(class_name, generic, interface, '<' + generic_extends + '>'))
 	else:
@@ -106,3 +102,4 @@ expressions = {
 
 				}
 }
+

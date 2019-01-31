@@ -3,42 +3,28 @@ This is a script for generating type-correct Java classes (implementations) from
 corresponding interfaces. By passing a java interface to this generator at the command line,
 an implementation file will be automatically constructed with all the proper method definitions. 
 Each method will return a predefined value in order to make the file compilable, as specified in 
-the returntypes.py module. See syntax.py for details about regex matching and class file generation.
+the returntypes.py module. See handlers.py for details about regex matching and class file generation.
 
 Written by: Andrew Greenwell
 """
 
 import settings
-import syntax
 import sys
-import re
+from handlers import handler_objects
 
-# Checks each regex string in syntax.py to look for matches on provided line.
-# Returns a tuple containing the match object and the relevant expression data
-# from syntax.py if a match is found. Else returns a tuple containing False.
+# Checks each handler object to look for regex matches on provided line.
+# Returns a tuple containing the match and handler objects if a match 
+# is found. Else returns a tuple containing False.
 def parse(line):
-	for category, expr_data in syntax.expressions.items():
-		match = re.compile(expr_data["regex"]).fullmatch(line)
+	for category, handler in handler_objects.items():
+		match = handler.match(line)
 		if match:
-			return (match, expr_data)
+			return (match, handler)
 	return (False, False)
 
 
-# Generates list of args to pass handler function based off regex metadata (see syntax.py).
-# Then calls the appropriate handler function to write out the proper Java code
-def write_to_class_file(class_file, match, expr_data):
-	args = [class_file] # every function in syntax.py requires the class_file as 1st arg
-	regex_specific_args = [match.group(group_num) for group_num \
-						   in range(1, expr_data["num_groups"] + 1)]
-	args.extend(regex_specific_args)
-	if len(args) != expr_data["num_args"]:
-		args.extend(['' for arg in range(0, expr_data["num_args"] - len(args))])
-	# unpack args list and pass to appropriate handler function
-	expr_data["function"](*args)
-
-
-# If the user provided a relative path to the interface,
-# return it. Else, return the null string.
+# If the user provided a relative path to the 
+# interface, return it. Else, return the null string.
 def getPath(interface_name):
 	path = ''
 	if '/' in interface_name:
@@ -52,10 +38,11 @@ def main():
 	try:
 		interface_name = sys.argv[1]
 	except:
-		print('***InvalidArgumentError*** : First Arg Must be a Valid Interface')
+		print('***InvalidArgumentError*** : First Arg Must be a Valid Interface', 
+			  file=sys.stderr)
 		exit(1)
 	try:
-		settings._num_spaces = int(sys.argv[2])
+		settings.num_spaces = int(sys.argv[2])
 	except:
 		pass
 
@@ -65,20 +52,23 @@ def main():
 	try:
 		interface_file = open(interface_name, 'r')
 	except:
-		print('***InvalidFilenameError*** : File or Relative Path Does Not Exist')
+		print('***InvalidFilenameError*** : File or Relative Path Does Not Exist', 
+			  file=sys.stderr)
 		exit(1)
-	syntax._class_name = input('Please enter the name of your class file: ')
-	class_file = open(path_to_interface + syntax._class_name, 'a')
-	class_file.write(settings._comments.format(interface_name))
+	class_name = input('Please enter the name of your class file: ')
+	class_file = open(path_to_interface + class_name, 'a')
+	class_file.write(settings.comments.format(interface_name))
+	class_name = class_name.rstrip('.java')
 
 	# main loop that parses each line of the interface and writes out corresponding Java code
 	for line in interface_file:
-		match, expr_data = parse(line.rstrip('\n'))
+		match, handler = parse(line.rstrip('\n'))
 		if match:
-			write_to_class_file(class_file, match, expr_data)
+			code = handler.generate_code(match, class_name)
+			class_file.write(code)
 	
 	# write out boilerplate closing lines and free up resources
-	class_file.write(' ' * settings._num_spaces + \
+	class_file.write(' ' * settings.num_spaces + \
 					 'public static void main(String[] args) {}\n\n}\n')
 	class_file.close()
 	interface_file.close()
