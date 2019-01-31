@@ -49,7 +49,6 @@ class _RegexHandler():
 		return code
 
 
-
 # public class for handling interface declarations
 class InterfaceHandler(_RegexHandler):
 
@@ -70,7 +69,6 @@ class InterfaceHandler(_RegexHandler):
 		return super().generate_code(match, class_name)
 
 
-
 # public class for handling method definitions
 class MethodHandler(_RegexHandler):
 
@@ -83,7 +81,6 @@ class MethodHandler(_RegexHandler):
 		except:
 			return_value = ' null'
 		return self._code_template.format(return_type, name, args, return_value)
-
 
 
 # public class for handling import statements

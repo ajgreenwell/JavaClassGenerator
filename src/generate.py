@@ -44,7 +44,7 @@ def main():
 	try:
 		settings.num_spaces = int(sys.argv[2])
 	except:
-		pass
+		pass # use default value from settings.py
 
 	path_to_interface = getPath(interface_name)
 
