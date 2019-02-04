@@ -20,6 +20,8 @@ class _RegexHandler():
 
 	# args list that will be packed and passed to child's _generate_code()
 	_args = []
+	# number of args required to call child's _generate_code(); overridden in child classes
+	_num_args = 0
 
 	def __init__(self, regex):
 		self._regex = re.compile(regex)
@@ -27,12 +29,10 @@ class _RegexHandler():
 	# uses match object to extract all necessary arguments for child's 
 	# _generate_code(), then packs them into the _args class variable
 	def _pack_args_list(self, match):
-		handler_specific_args = match.groups()
-		self._args.extend(handler_specific_args)
-		num_args_required = self._num_args
+		self._args.extend(match.groups()) # handler specific args
 		# if more args are required, pack in null strings for them
-		if len(self._args) < num_args_required:
-			self._args.extend(['' for arg in range(0, num_args_required - len(self._args))])
+		if len(self._args) < self._num_args:
+			self._args.extend(['' for arg in range(0, self._num_args - len(self._args))])
 
 	# returns a match object (see re.py module) 
 	# if there is a full match, else returns None
