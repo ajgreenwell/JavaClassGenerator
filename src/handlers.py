@@ -32,7 +32,7 @@ class _RegexHandler():
 		self._args.extend(match.groups()) # handler specific args
 		# if more args are required, pack in null strings for them
 		if len(self._args) < self._num_args:
-			self._args.extend(['' for arg in range(0, self._num_args - len(self._args))])
+			self._args.extend(['' for arg in range(self._num_args - len(self._args))])
 
 	# returns a match object (see re.py module) 
 	# if there is a full match, else returns None
