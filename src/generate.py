@@ -13,8 +13,6 @@ import sys
 from handlers import handler_objects
 
 # Checks each handler object to look for regex matches on provided line.
-# Returns a tuple containing the match and handler objects if a match 
-# is found. Else returns a tuple containing False.
 def parse(line):
 	for category, handler in handler_objects.items():
 		match = handler.match(line)
@@ -28,8 +26,8 @@ def parse(line):
 def getPath(interface_name):
 	path = ''
 	if '/' in interface_name:
-		relative_path_list = interface_name.split('/')
-		path = '/'.join(relative_path_list[:-1]) + '/'
+		path_list = interface_name.split('/')
+		path = '/'.join(path_list[:-1]) + '/'
 	return path
 
 

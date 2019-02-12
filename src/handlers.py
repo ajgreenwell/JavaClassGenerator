@@ -34,17 +34,13 @@ class _RegexHandler():
 		if len(self._args) < self._num_args:
 			self._args.extend(['' for arg in range(self._num_args - len(self._args))])
 
-	# returns a match object (see re.py module) 
-	# if there is a full match, else returns None
 	def match(self, line):
 		return self._regex.fullmatch(line)
 	
 	# will be overridden in InterfaceHandler, where 'class_name' arg is used
 	def generate_code(self, match, class_name):
 		self._pack_args_list(match)
-		# unpack args list and pass to child's protected method
 		code = self._generate_code(*self._args)
-		# necessary for reuse of the _args list
 		self._args.clear()
 		return code
 
@@ -53,7 +49,7 @@ class _RegexHandler():
 class InterfaceHandler(_RegexHandler):
 
 	_code_template = '\npublic class {}{} implements {}{} {{\n\n'
-	_num_args = 3 # numbers of args necessary to call _generate_code()
+	_num_args = 3
 	_class_name = ""
 
 	def _set_class_name(self, class_name):
