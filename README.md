@@ -37,7 +37,7 @@ This command would generate the proper class file from interface.java and use 4 
 
 ### Customization
 
-After downloading the JavaClassGenerator, you may find there are some settings you'd like to tweak. For example, you may want to adjust the auto-generated comments at the top of your class file, or the default number of spaces used for indentation levels. This can be done by opening up `settings.py` and changing the values of the provided global variables. Note that modifying the auto-generated comments could neccesitate modifying line 65 in _main()_ to avoid any string formatting exceptions.
+After downloading the JavaClassGenerator, you may find there are some settings you'd like to tweak. For example, you may want to adjust the auto-generated comments at the top of your class file, or the default number of spaces used for indentation levels. This can be done by opening up `settings.py` and changing the values of the provided global variables. Note that modifying the auto-generated comments could neccesitate modifying line 58 in _main()_ to avoid any string formatting exceptions.
 
 Lastly, for the frequent users of this code generator, you may wish to reduce the amount of typing required to run the `generate.py` module. You can always do so either by adding an alias to your system profile or by writing a simple shell script. For example, by creating an alias `jcg` for the command `python3 ~/absolute/path/to/generate.py`, you can then invoke the JavaClassGenerator from any directory, like so:
 

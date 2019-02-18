@@ -1,6 +1,6 @@
 """
 This module contains global variables that serve as customizable settings for users of the JavaClassGenerator.
-Note that modifying the comments variable could necessitate modifying line 60 of generate.py in order to resolve
+Note that modifying the comments variable could necessitate modifying line 58 of generate.py in order to resolve
 any string formatting exceptions.
 
 Written by: Andrew Greenwell
