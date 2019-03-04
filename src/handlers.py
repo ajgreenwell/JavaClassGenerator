@@ -26,18 +26,25 @@ class _RegexHandler():
 	def __init__(self, regex):
 		self._regex = re.compile(regex)
 
+	def _needs_more_args(self):
+		return len(self._args) != self._num_args
+
 	# uses match object to extract all necessary arguments for child's 
 	# _generate_code(), then packs them into the _args class variable
 	def _pack_args_list(self, match):
 		self._args.extend(match.groups()) # handler specific args
-		# if more args are required, pack in null strings for them
-		if len(self._args) < self._num_args:
+		if self._needs_more_args():
+			# pack in null strings for missing args
 			self._args.extend(['' for arg in range(self._num_args - len(self._args))])
+
+	# overriden in all child classes
+	def _generate_code(self):
+		return ''
 
 	def match(self, line):
 		return self._regex.fullmatch(line)
 	
-	# will be overridden in InterfaceHandler, where 'class_name' arg is used
+	# overridden in InterfaceHandler, where 'class_name' arg is used
 	def generate_code(self, match, class_name):
 		self._pack_args_list(match)
 		code = self._generate_code(*self._args)
@@ -59,7 +66,6 @@ class InterfaceHandler(_RegexHandler):
 		extension = generic if not generic_extends else '<' + generic_extends + '>'
 		return self._code_template.format(self._class_name, generic, interface, extension)
 
-	# overrides parent method
 	def generate_code(self, match, class_name):
 		self._set_class_name(class_name)
 		return super().generate_code(match, class_name)
@@ -71,12 +77,16 @@ class MethodHandler(_RegexHandler):
 	_code_template = ' ' * settings.num_spaces + 'public ' + '{} {}({}) {{ return{}; }}\n'
 	_num_args = 3
 
-	def _generate_code(self, return_type, name, args):
+	def _get_return_value(self, return_type):
 		try:
 			return_value = returntypes.values[return_type.lower()]
 		except:
 			return_value = ' null'
-		return self._code_template.format(return_type, name, args, return_value)
+		return return_value
+
+	def _generate_code(self, return_type, name, method_args):
+		return_value = self._get_return_value(return_type)
+		return self._code_template.format(return_type, name, method_args, return_value)
 
 
 # public class for handling import statements
@@ -89,8 +99,11 @@ class ImportHandler(_RegexHandler):
 		return self._code_template.format(module)
 
 
-# map of instatiated handler objects – each of which is 
-# used to handle Java interface file code in generate.py
+"""
+Map of instatiated handler objects – each of which is 
+used to handle Java interface file code in generate.py.
+Each regex must be unique & mutually exclusive from all others.
+"""
 handler_objects = {
 
 	'interface': 
@@ -102,7 +115,7 @@ handler_objects = {
 		InterfaceHandler('^ *public interface ([^ <>]+) extends .*{.*'),
 
 	'interface_generic': 
-
+		# uses the negative lookahead "(?!.*extends)" to ensure uniqueness
 		InterfaceHandler('^ *public interface ([^ <>]+)(<(?!.*extends).+>) {.*'),
 
 	'interface_generic_extends': 

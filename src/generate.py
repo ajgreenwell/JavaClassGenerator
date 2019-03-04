@@ -23,11 +23,12 @@ def parse(line):
 
 # If the user provided a relative path to the 
 # interface, return it. Else, return the null string.
-def getPath(interface_name):
+def get_path(interface_name):
 	path = ''
-	if '/' in interface_name:
-		path_list = interface_name.split('/')
-		path = '/'.join(path_list[:-1]) + '/'
+	interface_has_path = '/' in interface_name
+	if interface_has_path:
+		directory_list = interface_name.split('/')
+		path = '/'.join(directory_list[:-1]) + '/'
 	return path
 
 
@@ -42,9 +43,9 @@ def main():
 	try:
 		settings.num_spaces = int(sys.argv[2])
 	except:
-		pass # use default value from settings.py
+		pass # if user does not provide this argument, use default value from settings.py
 
-	path_to_interface = getPath(interface_name)
+	path_to_interface = get_path(interface_name)
 
 	# open interface and class files for reading and writing
 	try:
@@ -58,10 +59,10 @@ def main():
 	class_file.write(settings.comments.format(interface_name))
 	class_name = class_name.rstrip('.java')
 
-	# main loop that parses each line of the interface and writes out corresponding Java code
+	# main loop that parses each line of the interface
 	for line in interface_file:
 		match, handler = parse(line.rstrip('\n'))
-		if match:
+		if match and handler:
 			code = handler.generate_code(match, class_name)
 			class_file.write(code)
 	
