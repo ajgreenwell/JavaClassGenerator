@@ -12,23 +12,6 @@ import settings
 import sys
 from handlers import handler_objects
 
-# static class for dispatching command line argument error messages
-class CommandLineArgErrs():
-
-	__INTERFACE_ERROR_MSG = '***InvalidArgumentError*** : First Arg Must be a Valid Interface'
-	__INDENTATION_ERROR_MSG = None
-
-	__ERR_MESSAGES = {
-
-	'1': __INTERFACE_ERROR_MSG,
-	'2': __INDENTATION_ERROR_MSG
-
-	}
-
-	@classmethod
-	def get_err_msg(cls, arg_num):
-		return cls.__ERR_MESSAGES[str(arg_num)]
-
 
 # checks each handler object to look for regex matches on provided line
 def parse_interface_code(line):
@@ -52,16 +35,15 @@ def get_file_path(interface_name):
 
 # attempts to return provided command line arg
 # upon failure, dispatches appropriate error message and exits 
-def get_command_line_arg(arg_num):
-	arg = ''
+def get_interface_name():
+	interface_name = ''
 	try:
-		arg = sys.argv[arg_num]
+		interface_name = sys.argv[1]
 	except:
-		err_msg = CommandLineArgErrs.get_err_msg(arg_num)
-		if err_msg:
-			print(err_msg, file=stderr)
-			exit(1)
-	return arg
+		print('***InvalidArgumentError*** : First Arg Must be a Valid Interface', 
+			  file=stderr)
+		exit(1)
+	return interface_name
 
 
 # returns file object of user provided filename, opened in the mode provided
@@ -82,20 +64,16 @@ def prompt_for_class_name():
 	class_name = input('Please enter the name of your class file: ')
 	isJavaFile = class_name[len(class_name) - 5 :] == '.java'
 	if not isJavaFile:
-		print('***UserInputError*** : Your class name must end in ".java"')
+		print('***UserInputError*** : Your class name must end in ".java"',
+			  file=stderr)
 		exit(1)
 	return class_name
 
 
 def main():
-	# get command line args and user input
-	interface_name = get_command_line_arg(1)
+	# get user input
+	interface_name = get_interface_name()
 	class_name = prompt_for_class_name()
-
-	# optional arg - use default val in settings.py if not provided
-	num_spaces = get_command_line_arg(2)
-	if num_spaces:
-		settings.num_spaces = int(num_spaces)
 
 	# open interface and class files for reading and writing
 	interface_file = open_interface_file(interface_name, 'r')

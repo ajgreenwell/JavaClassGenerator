@@ -18,24 +18,23 @@ import re
 # protected parent class of all handler classes – not intended to be instantiated
 class _RegexHandler(): 
 
-	# args list that will be packed and passed to child's _generate_code()
-	_args = []
 	# number of args required to call child's _generate_code(); overridden in child classes
 	_num_args = 0
 
 	def __init__(self, regex):
 		self._regex = re.compile(regex)
+		self._args_list = []
 
 	def _needs_more_args(self):
-		return len(self._args) != self._num_args
+		return len(self._args_list) != self._num_args
 
 	# uses match object to extract all necessary arguments for child's 
-	# _generate_code(), then packs them into the _args class variable
+	# _generate_code(), then packs them into the _args_list member variable
 	def _pack_args_list(self, match):
-		self._args.extend(match.groups()) # handler specific args
+		self._args_list.extend(match.groups()) # handler specific args for _generate_code()
 		if self._needs_more_args():
 			# pack in null strings for missing args
-			self._args.extend(['' for arg in range(self._num_args - len(self._args))])
+			self._args_list.extend(['' for arg in range(self._num_args - len(self._args_list))])
 
 	# overriden in all child classes
 	def _generate_code(self):
@@ -47,8 +46,8 @@ class _RegexHandler():
 	# overridden in InterfaceHandler, where 'class_name' arg is used
 	def generate_code(self, match, class_name):
 		self._pack_args_list(match)
-		code = self._generate_code(*self._args)
-		self._args.clear()
+		code = self._generate_code(*self._args_list)
+		self._args_list.clear()
 		return code
 
 
@@ -100,7 +99,7 @@ class ImportHandler(_RegexHandler):
 
 
 """
-Map of instatiated handler objects – each of which is 
+Table of instatiated handler objects – each of which is 
 used to handle Java interface file code in generate.py.
 Each regex must be unique & mutually exclusive from all others.
 """
@@ -140,21 +139,20 @@ handler_objects = {
 if __name__ == '__main__':
 
 	import_handler = handler_objects['import']
-	interface_handler = handler_objects['interface_generic']
-	method_handler = handler_objects['public_method']
-
 	import_code = 'import java.util.*;'
-	interface_code = 'public interface SampleInterface<X, Y> {'
-	method_code = 'public boolean isValid(arg);'
-
 	import_match = import_handler.match(import_code)
-	interface_match = interface_handler.match(interface_code)
-	method_match = method_handler.match(method_code)
-
-	class_name = 'SampleClass'
-
 	print(import_handler.generate_code(import_match, class_name), end='')
+
+	interface_handler = handler_objects['interface_generic']
+	interface_code = 'public interface SampleInterface<X, Y> {'
+	interface_match = interface_handler.match(interface_code)
 	print(interface_handler.generate_code(interface_match, class_name), end='')
+
+
+	method_handler = handler_objects['public_method']
+	method_code = 'public boolean isValid(arg);'
+	method_match = method_handler.match(method_code)
+	class_name = 'SampleClass'
 	print(method_handler.generate_code(method_match, class_name), end='\n}\n')
 
 
