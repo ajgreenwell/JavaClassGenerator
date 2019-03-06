@@ -12,7 +12,7 @@ import settings
 import sys
 from handlers import handler_objects
 
-
+# static class for dispatching command line argument error messages
 class CommandLineArgErrs():
 
 	__INTERFACE_ERROR_MSG = '***InvalidArgumentError*** : First Arg Must be a Valid Interface'
@@ -30,7 +30,7 @@ class CommandLineArgErrs():
 		return cls.__ERR_MESSAGES[str(arg_num)]
 
 
-# Checks each handler object to look for regex matches on provided line.
+# checks each handler object to look for regex matches on provided line
 def parse_interface_code(line):
 	for category, handler in handler_objects.items():
 		match = handler.match(line)
@@ -49,19 +49,21 @@ def get_file_path(interface_name):
 		path = '/'.join(directory_list[:-1]) + '/'
 	return path
 
-
+# attempts to return provided command line arg
+# upon failure, dispatches appropriate error message and exits 
 def get_command_line_arg(arg_num):
 	arg = ''
 	try:
 		arg = sys.argv[arg_num]
-		return arg
 	except:
 		err_msg = CommandLineArgErrs.get_err_msg(arg_num)
 		if err_msg:
 			print(err_msg, file=stderr)
 			exit(1)
+	return arg
 
-
+# returns file object of user provided filename, opened in the mode provided
+# checks validity of filename -- if not valid, displays error message and exits
 def open_interface_file(filename, mode):
 	interface_file = ''
 	try:
@@ -72,7 +74,7 @@ def open_interface_file(filename, mode):
 		exit(1)
 	return interface_file
 
-
+# returns user provided class name, after ensuring it contains the ".java" extension
 def prompt_for_class_name():
 	class_name = input('Please enter the name of your class file: ')
 	isJavaFile = class_name[len(class_name) - 5 :] == '.java'
@@ -87,9 +89,10 @@ def main():
 	interface_name = get_command_line_arg(1)
 	class_name = prompt_for_class_name()
 
+	# optional arg - use default val in settings.py if not provided
 	num_spaces = get_command_line_arg(2)
 	if num_spaces:
-		settings._num_spaces = int(num_spaces)
+		settings.num_spaces = int(num_spaces)
 
 	# open interface and class files for reading and writing
 	interface_file = open_interface_file(interface_name, 'r')
