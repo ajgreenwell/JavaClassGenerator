@@ -49,6 +49,7 @@ def get_file_path(interface_name):
 		path = '/'.join(directory_list[:-1]) + '/'
 	return path
 
+
 # attempts to return provided command line arg
 # upon failure, dispatches appropriate error message and exits 
 def get_command_line_arg(arg_num):
@@ -62,6 +63,7 @@ def get_command_line_arg(arg_num):
 			exit(1)
 	return arg
 
+
 # returns file object of user provided filename, opened in the mode provided
 # checks validity of filename -- if not valid, displays error message and exits
 def open_interface_file(filename, mode):
@@ -73,6 +75,7 @@ def open_interface_file(filename, mode):
 			  file=sys.stderr)
 		exit(1)
 	return interface_file
+
 
 # returns user provided class name, after ensuring it contains the ".java" extension
 def prompt_for_class_name():
