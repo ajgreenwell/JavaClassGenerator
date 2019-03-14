@@ -64,7 +64,7 @@ def prompt_for_class_name():
 	class_name = input('Please enter the name of your class file: ')
 	class_name_length = len(class_name)
 	isJavaFile = class_name_length > 5 and \
-				 class_name[class_name_length - 5 :] == '.java'
+	             class_name[class_name_length - 5 :] == '.java'
 	if not isJavaFile:
 		print('***UserInputError*** : Your class name must end in ".java"',
               file=sys.stderr)
