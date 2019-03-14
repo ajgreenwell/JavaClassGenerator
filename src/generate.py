@@ -40,7 +40,7 @@ def get_interface_name():
 	try:
 		interface_name = sys.argv[1]
 	except:
-		print('***InvalidArgumentError*** : First Arg Must be a Valid Interface', 
+		print('***InvalidArgumentError*** : First Arg Must be a Valid Interface', \
 			  file=sys.stderr)
 		exit(1)
 	return interface_name
