@@ -34,14 +34,14 @@ def get_file_path(interface_name):
 
 
 # attempts to return provided command line arg
-# upon failure, dispatches appropriate error message and exits 
+# upon failure, prints appropriate error message and exits 
 def get_interface_name():
 	interface_name = ''
 	try:
 		interface_name = sys.argv[1]
 	except:
 		print('***InvalidArgumentError*** : First Arg Must be a Valid Interface', 
-			  file=stderr)
+			  file=sys.stderr)
 		exit(1)
 	return interface_name
 
@@ -62,10 +62,12 @@ def open_interface_file(filename, mode):
 # returns user provided class name, after ensuring it contains the ".java" extension
 def prompt_for_class_name():
 	class_name = input('Please enter the name of your class file: ')
-	isJavaFile = class_name[len(class_name) - 5 :] == '.java'
+	class_name_length = len(class_name)
+	isJavaFile = class_name_length > 5 and \
+				 class_name[class_name_length - 5 :] == '.java'
 	if not isJavaFile:
 		print('***UserInputError*** : Your class name must end in ".java"',
-			  file=stderr)
+			  file=sys.stderr)
 		exit(1)
 	return class_name
 
