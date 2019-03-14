@@ -41,7 +41,7 @@ def get_interface_name():
 		interface_name = sys.argv[1]
 	except:
 		print('***InvalidArgumentError*** : First Arg Must be a Valid Interface', 
-              file=sys.stderr)
+			  file=sys.stderr)
 		exit(1)
 	return interface_name
 
@@ -54,7 +54,7 @@ def open_interface_file(filename, mode):
 		interface_file = open(filename, mode)
 	except:
 		print('***InvalidFilenameError*** : File or Relative Path Does Not Exist', 
-              file=sys.stderr)
+			  file=sys.stderr)
 		exit(1)
 	return interface_file
 
@@ -67,7 +67,7 @@ def prompt_for_class_name():
 	             class_name[class_name_length - 5 :] == '.java'
 	if not isJavaFile:
 		print('***UserInputError*** : Your class name must end in ".java"',
-              file=sys.stderr)
+			  file=sys.stderr)
 		exit(1)
 	return class_name
 
