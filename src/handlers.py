@@ -29,12 +29,13 @@ class _RegexHandler():
 		return len(self._args_list) != self._num_args
 
 	# uses match object to extract all necessary arguments for child's 
-	# _generate_code(), then packs them into the _args_list member variable
+	# _generate_code(), then packs them into the _args_list instance variable
 	def _pack_args_list(self, match):
 		self._args_list.extend(match.groups()) # handler specific args for _generate_code()
 		if self._needs_more_args():
 			# pack in null strings for missing args
-			self._args_list.extend(['' for arg in range(self._num_args - len(self._args_list))])
+			arg_placeholders = ['' for arg in range(self._num_args - len(self._args_list))]
+			self._args_list.extend(arg_placeholders)
 
 	# overriden in all child classes
 	def _generate_code(self):
@@ -99,9 +100,9 @@ class ImportHandler(_RegexHandler):
 
 
 """
-Table of instatiated handler objects – each of which is 
-used to handle Java interface file code in generate.py.
-Each regex must be unique & mutually exclusive from all others.
+Map of instatiated handler objects – each of which is 
+used to handle Java interface code in generate.py. Each
+regex must be unique & mutually exclusive from all others.
 """
 handler_objects = {
 
@@ -114,7 +115,7 @@ handler_objects = {
 		InterfaceHandler('^ *public interface ([^ <>]+) extends .*{.*'),
 
 	'interface_generic': 
-		# uses the negative lookahead "(?!.*extends)" to ensure uniqueness
+		
 		InterfaceHandler('^ *public interface ([^ <>]+)(<(?!.*extends).+>) {.*'),
 
 	'interface_generic_extends': 
@@ -154,7 +155,3 @@ if __name__ == '__main__':
 	method_match = method_handler.match(method_code)
 	class_name = 'SampleClass'
 	print(method_handler.generate_code(method_match, class_name), end='\n}\n')
-
-
-
-
