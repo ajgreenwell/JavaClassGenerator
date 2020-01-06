@@ -25,11 +25,11 @@ def is_java_file(filename):
 def get_interface_name():
     try:
         interface_name = sys.argv[1]
+        return interface_name
     except:
         print('***UserInputError*** : First Arg Must be a Valid Interface',
               file=sys.stderr)
         exit(1)
-    return interface_name
 
 
 def prompt_for_class_name():
@@ -48,11 +48,11 @@ def get_user_input():
 def open_interface_file(filename, mode):
     try:
         interface_file = open(filename, mode)
+        return interface_file
     except:
         print('***UserInputError*** : File or Relative Path Does Not Exist', 
               file=sys.stderr)
         exit(1)
-    return interface_file
 
 
 def get_file_path(interface_name):
