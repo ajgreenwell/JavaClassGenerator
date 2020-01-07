@@ -101,39 +101,18 @@ class ImportHandler(_RegexHandler):
 
 
 """
-Map of instatiated handler objects – each of which is 
+List of instatiated handler objects – each of which is 
 used to handle Java interface code in generate.py. Each
 regex must be unique & mutually exclusive from all others.
 """
 handler_objects = {
-
-    'interface': 
-
-        InterfaceHandler('^ *public interface ([^ <>]+) {.*'),
-
-    'interface_extends': 
-
-        InterfaceHandler('^ *public interface ([^ <>]+) extends .*{.*'),
-
-    'interface_generic': 
-        
-        InterfaceHandler('^ *public interface ([^ <>]+)(<(?!.*extends).+>) {.*'),
-
-    'interface_generic_extends': 
-
-        InterfaceHandler('^ *public interface ([^ <>]+)(<(.+) extends .+>) {.*'),
-
-    'import': 
-
-        ImportHandler('^ *import (.+;).*'),
-
-    'method': 
-
-        MethodHandler('^ *([\S]+) ([\S]+)\((.*)\);.*'),
-
-    'public_method': 
-
-        MethodHandler('^ *public ([\S]+) ([\S]+)\((.*)\);.*')
+    ImportHandler('^ *import (.+;).*'),
+    MethodHandler('^ *([\S]+) ([\S]+)\((.*)\);.*'),
+    MethodHandler('^ *public ([\S]+) ([\S]+)\((.*)\);.*'),
+    InterfaceHandler('^ *public interface ([^ <>]+) {.*'),
+    InterfaceHandler('^ *public interface ([^ <>]+) extends .*{.*'),
+    InterfaceHandler('^ *public interface ([^ <>]+)(<(?!.*extends).+>) {.*'),
+    InterfaceHandler('^ *public interface ([^ <>]+)(<(.+) extends .+>) {.*')
 }
 
 

@@ -20,37 +20,34 @@ def is_java_file(filename):
            CLASS_FILE_EXTENSION in filename
 
 
+def handle_user_input_error(error_message):
+    print(f'*** User Input Error *** : {error_message}', file=sys.stderr)
+    exit(1)
+
+
 def get_interface_name():
     try:
-        interface_name = sys.argv[1]
-        return interface_name
+        return sys.argv[1]
     except:
-        print('***UserInputError*** : First Arg Must be a Valid Interface',
-              file=sys.stderr)
-        exit(1)
+        handle_user_input_error('First Arg Must be a Valid Interface')
 
 
 def prompt_for_class_name():
     class_name = input('Please enter the name of your class file: ')
-    if not is_java_file(class_name):
-        print(f'***UserInputError*** : Your class name must end in "{CLASS_FILE_EXTENSION}"',
-              file=sys.stderr)
-        exit(1)
-    return class_name
+    if is_java_file(class_name):
+        return class_name
+    handle_user_input_error(f'Your class name must end in "{CLASS_FILE_EXTENSION}"')
 
 
 def get_user_input():
     return (get_interface_name(), prompt_for_class_name())
 
 
-def open_interface_file(filename, mode):
+def open_interface_file(interface_name):
     try:
-        interface_file = open(filename, mode)
-        return interface_file
+        return open(interface_name, 'r')
     except:
-        print('***UserInputError*** : File or Relative Path Does Not Exist', 
-              file=sys.stderr)
-        exit(1)
+        handle_user_input_error('File or Relative Path Does Not Exist')
 
 
 def get_file_path(filename):
@@ -63,7 +60,7 @@ def get_file_path(filename):
 
 
 def init_files(interface_name, class_name):
-    interface_file = open_interface_file(interface_name, 'r')
+    interface_file = open_interface_file(interface_name)
     path_to_interface = get_file_path(interface_name)
     class_file = open(path_to_interface + class_name, 'a')
     class_file.write(settings.comments.format(interface=interface_name))
@@ -86,7 +83,7 @@ def files(interface_name, class_name):
 
 # checks each handler object to look for regex matches on provided line
 def parse_interface_code(line):
-    for category, handler in handler_objects.items():
+    for handler in handler_objects:
         match = handler.match(line)
         if match:
             return (handler, match)
