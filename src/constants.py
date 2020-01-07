@@ -1,0 +1,1 @@
+CLASS_FILE_EXTENSION = '.java'

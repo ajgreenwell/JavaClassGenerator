@@ -14,6 +14,7 @@ Written by: Andrew Greenwell
 import settings
 import returntypes
 import re
+from constants import CLASS_FILE_EXTENSION
 
 # protected parent class of all handler classes – not intended to be instantiated
 class _RegexHandler(): 
@@ -60,7 +61,7 @@ class InterfaceHandler(_RegexHandler):
     _class_name = ""
 
     def _set_class_name(self, class_name):
-        self._class_name = class_name
+        self._class_name = class_name.rstrip(CLASS_FILE_EXTENSION)
 
     def _generate_code(self, interface, generic, generic_extends):
         extension = generic if not generic_extends else '<' + generic_extends + '>'

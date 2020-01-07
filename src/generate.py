@@ -12,9 +12,7 @@ import settings
 import sys
 from contextlib import contextmanager
 from handlers import handler_objects
-
-
-CLASS_FILE_EXTENSION = '.java'
+from constants import CLASS_FILE_EXTENSION
 
 
 def is_java_file(filename):
@@ -55,11 +53,11 @@ def open_interface_file(filename, mode):
         exit(1)
 
 
-def get_file_path(interface_name):
+def get_file_path(filename):
     path = ''
-    interface_name_has_path = '/' in interface_name
-    if interface_name_has_path:
-        directories = interface_name.split('/')
+    filename_has_path = '/' in filename
+    if filename_has_path:
+        directories = filename.split('/')
         path = '/'.join(directories[:-1]) + '/'
     return path
 
@@ -106,7 +104,6 @@ def matching_lines(file):
 def main():
     interface_name, class_name = get_user_input()
     with files(interface_name, class_name) as (interface_file, class_file):
-        class_name = class_name.rstrip(CLASS_FILE_EXTENSION)
         # parses each line of the interface and generates the corresponding java code
         for handler, match in matching_lines(interface_file):
             class_file.write(handler.generate_code(match, class_name))
