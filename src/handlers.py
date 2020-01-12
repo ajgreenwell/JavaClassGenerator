@@ -104,8 +104,7 @@ class ImportHandler(_RegexHandler):
 
 """
 List of instatiated handler objects – each of which is 
-used to handle Java interface code in generate.py. Each
-regex must be unique & mutually exclusive from all others.
+used to handle Java interface code in generate.py.
 """
 handlers = [
     ImportHandler('^ *import (.+;).*'),
