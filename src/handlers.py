@@ -16,7 +16,8 @@ import returntypes
 import re
 from constants import CLASS_FILE_EXTENSION
 
-# protected parent class of all handler classes – not intended to be instantiated
+
+# abstract parent class of all handler classes – not intended to be instantiated
 class _RegexHandler(): 
 
     # number of args required to call child's _generate_code(); overridden in child classes
@@ -38,15 +39,16 @@ class _RegexHandler():
             arg_placeholders = ['' for arg in range(self._num_args - len(self._args_list))]
             self._args_list.extend(arg_placeholders)
 
-    # overriden in all child classes
     def _generate_code(self):
-        return ''
+        pass
 
     def match(self, line):
         return self._regex.fullmatch(line)
     
     # overridden in InterfaceHandler, where 'class_name' arg is used
     def generate_code(self, match, class_name):
+        if match is None:
+            raise ValueError('match object cannot be None')
         self._pack_args_list(match)
         code = self._generate_code(*self._args_list)
         self._args_list.clear()
@@ -105,33 +107,34 @@ List of instatiated handler objects – each of which is
 used to handle Java interface code in generate.py. Each
 regex must be unique & mutually exclusive from all others.
 """
-handler_objects = {
+handlers = [
     ImportHandler('^ *import (.+;).*'),
     MethodHandler('^ *([\S]+) ([\S]+)\((.*)\);.*'),
     MethodHandler('^ *public ([\S]+) ([\S]+)\((.*)\);.*'),
-    InterfaceHandler('^ *public interface ([^ <>]+) {.*'),
     InterfaceHandler('^ *public interface ([^ <>]+) extends .*{.*'),
     InterfaceHandler('^ *public interface ([^ <>]+)(<(?!.*extends).+>) {.*'),
-    InterfaceHandler('^ *public interface ([^ <>]+)(<(.+) extends .+>) {.*')
-}
+    InterfaceHandler('^ *public interface ([^ <>]+)(<(.+) extends .+>) {.*'),
+    InterfaceHandler('^ *public interface (.+) {.*')
+]
 
 
 # some unit testing
 if __name__ == '__main__':
 
-    import_handler = handler_objects['import']
+    class_name = 'SampleClass'
+
+    import_handler = handlers[0]
     import_code = 'import java.util.*;'
     import_match = import_handler.match(import_code)
     print(import_handler.generate_code(import_match, class_name), end='')
 
-    interface_handler = handler_objects['interface_generic']
-    interface_code = 'public interface SampleInterface<X, Y> {'
+    interface_handler = handlers[6]
+    interface_code = 'public interface SampleInterface<Key, Value> {'
     interface_match = interface_handler.match(interface_code)
     print(interface_handler.generate_code(interface_match, class_name), end='')
 
-
-    method_handler = handler_objects['public_method']
-    method_code = 'public boolean isValid(arg);'
+    method_handler = handlers[2]
+    method_code = 'public boolean isValid(int arg);'
     method_match = method_handler.match(method_code)
-    class_name = 'SampleClass'
     print(method_handler.generate_code(method_match, class_name), end='\n}\n')
+

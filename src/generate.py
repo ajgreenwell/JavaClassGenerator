@@ -11,13 +11,13 @@ Written by: Andrew Greenwell
 import settings
 import sys
 from contextlib import contextmanager
-from handlers import handler_objects
+from handlers import handlers
 from constants import CLASS_FILE_EXTENSION
 
 
 def is_java_file(filename):
     return len(filename) > len(CLASS_FILE_EXTENSION) and  \
-           CLASS_FILE_EXTENSION in filename
+           filename[-5:] == CLASS_FILE_EXTENSION
 
 
 def handle_user_input_error(error_message):
@@ -81,17 +81,14 @@ def files(interface_name, class_name):
     teardown_files(interface_file, class_file)
 
 
-# checks each handler object to look for regex matches on provided line
 def parse_interface_code(line):
-    for handler in handler_objects:
+    for handler in handlers:
         match = handler.match(line)
         if match:
             return (handler, match)
     return (False, False)
 
 
-# generator that finds relevant lines of java interface
-# code and yields the appropriate handlers and match objects
 def matching_lines(file):
     for line in file:
         handler, match = parse_interface_code(line.rstrip('\n'))
@@ -101,7 +98,6 @@ def matching_lines(file):
 def main():
     interface_name, class_name = get_user_input()
     with files(interface_name, class_name) as (interface_file, class_file):
-        # parses each line of the interface and generates the corresponding java code
         for handler, match in matching_lines(interface_file):
             class_file.write(handler.generate_code(match, class_name))
     
