@@ -15,14 +15,15 @@ from handlers import handlers
 from constants import CLASS_FILE_EXTENSION
 
 
-def is_java_file(filename):
-    return len(filename) > len(CLASS_FILE_EXTENSION) and  \
-           filename[-5:] == CLASS_FILE_EXTENSION
+def main():
+    interface_name, class_name = get_user_input()
+    with files(interface_name, class_name) as (interface_file, class_file):
+        for handler, match in matching_lines(interface_file):
+            class_file.write(handler.generate_code(match, class_name))
 
 
-def handle_user_input_error(error_message):
-    print(f'*** User Input Error *** : {error_message}', file=sys.stderr)
-    exit(1)
+def get_user_input():
+    return (get_interface_name(), prompt_for_class_name())
 
 
 def get_interface_name():
@@ -39,24 +40,21 @@ def prompt_for_class_name():
     handle_user_input_error(f'Your class name must end in "{CLASS_FILE_EXTENSION}"')
 
 
-def get_user_input():
-    return (get_interface_name(), prompt_for_class_name())
+def handle_user_input_error(error_message):
+    print(f'*** User Input Error *** : {error_message}', file=sys.stderr)
+    exit(1)
 
 
-def open_interface_file(interface_name):
-    try:
-        return open(interface_name, 'r')
-    except:
-        handle_user_input_error('File or Relative Path Does Not Exist')
+def is_java_file(filename):
+    return len(filename) > len(CLASS_FILE_EXTENSION) and  \
+           filename[-5:] == CLASS_FILE_EXTENSION
 
 
-def get_file_path(filename):
-    path = ''
-    filename_has_path = '/' in filename
-    if filename_has_path:
-        directories = filename.split('/')
-        path = '/'.join(directories[:-1]) + '/'
-    return path
+@contextmanager
+def files(interface_name, class_name):
+    interface_file, class_file = init_files(interface_name, class_name)
+    yield interface_file, class_file
+    teardown_files(interface_file, class_file)
 
 
 def init_files(interface_name, class_name):
@@ -74,19 +72,19 @@ def teardown_files(interface_file, class_file):
     interface_file.close()
 
 
-@contextmanager
-def files(interface_name, class_name):
-    interface_file, class_file = init_files(interface_name, class_name)
-    yield interface_file, class_file
-    teardown_files(interface_file, class_file)
+def open_interface_file(interface_name):
+    try:
+        return open(interface_name, 'r')
+    except:
+        handle_user_input_error('File or Relative Path Does Not Exist')
 
 
-def parse_interface_code(line):
-    for handler in handlers:
-        match = handler.match(line)
-        if match:
-            return (handler, match)
-    return (False, False)
+def get_file_path(filename):
+    filename_has_path = '/' in filename
+    if filename_has_path:
+        directories = filename.split('/')
+        return '/'.join(directories[:-1]) + '/'
+    return ''
 
 
 def matching_lines(file):
@@ -95,11 +93,12 @@ def matching_lines(file):
         if handler and match: yield handler, match
 
 
-def main():
-    interface_name, class_name = get_user_input()
-    with files(interface_name, class_name) as (interface_file, class_file):
-        for handler, match in matching_lines(interface_file):
-            class_file.write(handler.generate_code(match, class_name))
+def parse_interface_code(line):
+    for handler in handlers:
+        match = handler.match(line)
+        if match:
+            return (handler, match)
+    return (False, False)
     
     
 if __name__ == '__main__':
